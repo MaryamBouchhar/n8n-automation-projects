@@ -46,3 +46,33 @@ The workflow runs automatically every day at 7 AM, delivering daily motivation w
 - Gmail API
 
 
+### 3️⃣ AI Document Summarizer
+
+An AI-powered workflow that automatically summarizes uploaded PDF documents and stores the results for future reference.
+
+The workflow starts when a user submits a form with a PDF file. The document text is extracted, summarized using AI, enriched with contextual knowledge, and saved to Google Sheets.
+
+### 🔄 Workflow Logic
+
+1. Workflow is triggered on form submission
+2. User uploads a PDF document
+3. Text is extracted from the file
+4. AI model generates a clear and concise summary
+5. Wikipedia tool is used for additional context when needed
+6. Title, summary, and date are saved to Google Sheets
+
+### 🛠 Tools & Technologies
+
+- n8n
+- OpenAI (Message Model)
+- Wikipedia Tool
+- Google Forms (file upload)
+- Google Sheets (Append row in sheet)
+
+### 📄 Stored Data (Google Sheets)
+
+| Title | Summary | Date Added |
+|------|--------|-----------|
+
+
+
