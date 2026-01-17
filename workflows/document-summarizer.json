@@ -1,0 +1,225 @@
+{
+  "name": "document-summarizer",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "AI Document Summarizer",
+        "formDescription": "Please upload the file to be summarized",
+        "formFields": {
+          "values": [
+            {
+              "fieldName": "Document",
+              "fieldLabel": "Document",
+              "fieldType": "file",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e6122c30-61dc-4a3b-8d1f-0b19b36f60ff",
+      "name": "On form submission",
+      "webhookId": "bc630b4c-72dd-4e45-8fe9-e2acf7d5f0c0"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "Document",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        192,
+        0
+      ],
+      "id": "8fb2195f-4f55-439f-8dd7-e4b97d461539",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Summarize this text:  {{ $json.text }}\nUse wikipedia tool, for searching additional information about the subject"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        368,
+        -16
+      ],
+      "id": "c31d5d57-7888-4f96-8007-6c79a7f568ac",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "aw5OOmtGWV2ckPi4",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        496,
+        208
+      ],
+      "id": "2ef1d5bc-6fff-4c1d-8a2b-d5ee0415b3b9",
+      "name": "Wikipedia"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1GanFRsedW4Jf-kTO5w6Xt7pqolQXppQ1_wAuqxtbbEs",
+          "mode": "list",
+          "cachedResultName": "document-summary",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GanFRsedW4Jf-kTO5w6Xt7pqolQXppQ1_wAuqxtbbEs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GanFRsedW4Jf-kTO5w6Xt7pqolQXppQ1_wAuqxtbbEs/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Ttile": "={{ $('On form submission').item.json.Document[0].filename }}",
+            "Summary": "={{ $json.output[0].content[0].text }}",
+            "Date": "={{ $('On form submission').item.json.submittedAt.toDateTime().format('yyyy-MM-dd HH:mm') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Ttile",
+              "displayName": "Ttile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        672,
+        -16
+      ],
+      "id": "3455defe-14d1-417e-8efb-c59f08184d48",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "tHcokWGrLIYtk4pl",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        [
+          {
+            "node": "Message a model",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "fa19a8f3-d0b4-413c-8fd5-b6e21fcdb9f0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4ce88e0c1bb26bc4d88e91378766bf7e977127b1c22d96478309dc636003e221"
+  },
+  "id": "t8lgr_Em8fxqy9DUcvlFE",
+  "tags": []
+}
