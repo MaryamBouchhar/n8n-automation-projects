@@ -46,3 +46,58 @@ The workflow runs automatically every day at 7 AM, delivering daily motivation w
 - Gmail API
 
 
+### 3️⃣ AI Document Summarizer
+
+An AI-powered workflow that automatically summarizes uploaded PDF documents and stores the results for future reference.
+
+The workflow starts when a user submits a form with a PDF file. The document text is extracted, summarized using AI, enriched with contextual knowledge, and saved to Google Sheets.
+
+### 🔄 Workflow Logic
+
+1. Workflow is triggered on form submission
+2. User uploads a PDF document
+3. Text is extracted from the file
+4. AI model generates a clear and concise summary
+5. Wikipedia tool is used for additional context when needed
+6. Title, summary, and date are saved to Google Sheets
+
+### 🛠 Tools & Technologies
+
+- n8n
+- OpenAI (Message Model)
+- Wikipedia Tool
+- Google Forms (file upload)
+- Google Sheets (Append row in sheet)
+
+### 📄 Stored Data (Google Sheets)
+
+| Title | Summary | Date Added |
+|------|--------|-----------|
+
+### 4️⃣ Data Backup System (Form → OneDrive → Google Sheets)
+
+An automated data backup workflow that stores job application data securely by saving uploaded resumes to OneDrive and logging applicant information in Google Sheets.
+
+This workflow ensures that applicant files and metadata are safely backed up and easily accessible.
+
+### 🔄 Workflow Logic
+
+1. Workflow is triggered on form submission
+2. Applicant submits personal information and resume
+3. Resume file is uploaded to OneDrive
+4. Applicant data and file URL are appended to Google Sheets
+   
+### 🛠 Tools & Technologies
+
+- n8n
+- Google Forms (file upload)
+- OneDrive
+- Google Sheets
+
+### 📄 Stored Data (Google Sheets)
+
+| Full Name | Email | Position Applied For | File URL |
+|---------|-------|----------------------|----------|
+
+
+
