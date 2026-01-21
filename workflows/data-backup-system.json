@@ -1,0 +1,208 @@
+{
+  "name": "data-backup-system",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Data backup system",
+        "formDescription": "Please provide the following informations",
+        "formFields": {
+          "values": [
+            {
+              "fieldName": "Full Name",
+              "fieldLabel": "Full Name",
+              "placeholder": "Enter your full name",
+              "requiredField": true
+            },
+            {
+              "fieldName": "Email Address",
+              "fieldLabel": "Email Address",
+              "fieldType": "email",
+              "placeholder": "Enter your Email",
+              "requiredField": true
+            },
+            {
+              "fieldName": "Position Applied For",
+              "fieldLabel": "Position Applied For",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Marketing Specialist"
+                  },
+                  {
+                    "option": "Data Scientist"
+                  },
+                  {
+                    "option": "IA engineer"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldName": "Resume",
+              "fieldLabel": "Resume",
+              "fieldType": "file",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ca5ecedc-4e05-41c4-be5e-85342d715ecf",
+      "name": "On form submission",
+      "webhookId": "be6a6800-526f-468f-a8bf-6a9eb5979982"
+    },
+    {
+      "parameters": {
+        "fileName": "={{ $json.Resume[0].filename }}",
+        "parentId": "32778A004EF46F11!s30b97e36d2194f84bf352a02200dcd7f",
+        "binaryData": true,
+        "binaryPropertyName": "Resume"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "d259be84-de56-44b9-9197-1146f1bc2280",
+      "name": "Upload a file",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "R5hDuMrNDpK9Z2Ov",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1gFdfPdyIiPvRFQqOtR_SaWOKs8uYihsw-wd4z1AWBS8",
+          "mode": "list",
+          "cachedResultName": "resumes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1gFdfPdyIiPvRFQqOtR_SaWOKs8uYihsw-wd4z1AWBS8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1gFdfPdyIiPvRFQqOtR_SaWOKs8uYihsw-wd4z1AWBS8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full Name": "={{ $('On form submission').item.json['Full Name'] }}",
+            "Email": "={{ $('On form submission').item.json['Email Address'] }}",
+            "Position Applied For": "={{ $('On form submission').item.json['Position Applied For'] }}",
+            "File URL": "={{ $json.webUrl }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Position Applied For",
+              "displayName": "Position Applied For",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "File URL",
+              "displayName": "File URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        0
+      ],
+      "id": "0c7f2cb6-e0a3-464b-8dca-4aaa6ff86a44",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "tHcokWGrLIYtk4pl",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Upload a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload a file": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "40e63911-7a14-46ce-aec6-bfb989a2c935",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4ce88e0c1bb26bc4d88e91378766bf7e977127b1c22d96478309dc636003e221"
+  },
+  "id": "FIcXPVCw9O7r3MWwCrIT2",
+  "tags": []
+}
