@@ -99,5 +99,25 @@ This workflow ensures that applicant files and metadata are safely backed up and
 | Full Name | Email | Position Applied For | File URL |
 |---------|-------|----------------------|----------|
 
+### 5️⃣ LinkedIn Post Generator
 
+**Description**  
+An AI-powered workflow that generates professional, research-based LinkedIn posts.
 
+Users submit a form with a post topic and target audience. The system researches the topic, writes a high-quality LinkedIn post, and prepares the content for publishing and email delivery.
+
+### 🔄 Workflow Logic
+
+1. Workflow starts on form submission
+2. AI agent researches the topic using Tavily (real-time search)
+3. AI agent writes a professional LinkedIn post tailored to the audience
+4. Post is published on LinkedIn and sent a confirmation email
+   
+### 🛠 Tools & Technologies
+
+- n8n
+- OpenAI 
+- Tavily Search API
+- Gmail
+- LinkedIn API
+  
