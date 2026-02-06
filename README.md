@@ -11,7 +11,7 @@ Instead of manually searching for contact details and writing emails, the AI age
 
 ### 🔄 Workflow Logic
 
-1. A chat message is received (example: “Send an email to Maria B”)
+1. A chat message is received
 2. The AI Agent analyzes the message:
    - Identifies the customer name
    - Extracts the email content
@@ -25,6 +25,8 @@ Instead of manually searching for contact details and writing emails, the AI age
 - **OpenAI** – AI Agent reasoning & language understanding
 - **Google Sheets** – Customer database
 - **Gmail API** – Email delivery
+
+____________________________________________________________________________________________________________________________
 
 ### 2️⃣ Motivational Quote Generator
  
@@ -45,6 +47,7 @@ The workflow runs automatically every day at 7 AM, delivering daily motivation w
 - Google Sheets
 - Gmail API
 
+____________________________________________________________________________________________________________________________
 
 ### 3️⃣ AI Document Summarizer
 
@@ -74,6 +77,8 @@ The workflow starts when a user submits a form with a PDF file. The document tex
 | Title | Summary | Date Added |
 |------|--------|-----------|
 
+____________________________________________________________________________________________________________________________
+
 ### 4️⃣ Data Backup System (Form → OneDrive → Google Sheets)
 
 An automated data backup workflow that stores job application data securely by saving uploaded resumes to OneDrive and logging applicant information in Google Sheets.
@@ -99,6 +104,8 @@ This workflow ensures that applicant files and metadata are safely backed up and
 | Full Name | Email | Position Applied For | File URL |
 |---------|-------|----------------------|----------|
 
+____________________________________________________________________________________________________________________________
+
 ### 5️⃣ LinkedIn Post Generator
 
 **Description**  
@@ -120,4 +127,26 @@ Users submit a form with a post topic and target audience. The system researches
 - Tavily Search API
 - Gmail
 - LinkedIn API
-  
+
+____________________________________________________________________________________________________________________________
+
+### 6️⃣ Gmail Inbox Classifier & Auto-Responder (AI-Powered)
+An AI-powered Gmail automation system that automatically classifies incoming emails and sends responses based on their intent.
+The workflow analyze email content, classifies messages into preddfined categories, applies Gmail labels, and sends tailored replies without manual intervention.
+
+### 🔄 Workflow Logic
+1. Gmail trigger listens for new incoming messages.
+2. AI extracts key information from the email.
+3. Data is cleaned and normalized.
+4. AI classifier categorizes the email:
+   - Service Requests
+   - Payments
+   - Consultations Requests.
+   - Others.
+5. Gmail labels are applied automatically.
+6. Predefined responses are sent based on the category.
+   
+### 🛠 Tools & Technologies
+- n8n
+- OpenAI
+- Gmail API
