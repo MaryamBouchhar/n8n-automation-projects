@@ -150,3 +150,39 @@ The workflow analyze email content, classifies messages into preddfined categori
 - n8n
 - OpenAI
 - Gmail API
+______________________________________________________________________________________________________________________
+
+### 7️⃣ AI-Powered Client Onboarding System
+
+An advanced client onboarding workflow that automates the entire onboarding lifecycle - from data collection to follow-up - using AI, CRM integration, and multi-channel communication.
+
+This system not only stores client data but also generates personalized communication, schedules meetings, and ensures continuous engagement.
+
+### 🔄 Workflow Logic
+
+1. Workflow is triggered when a new client submits a form
+2. Client data is cleaned and structured
+3. AI generates a structured client summary
+4. Client data is stored in Google Sheets
+5. Contact is created in HubSpot (CRM)
+
+**Parallel onboarding actions:**
+6. AI generates a personalized welcome email → sent via Gmail  
+7. A welcome call is automatically scheduled via Google Calendar  
+8. Internal team is notified via Slack  
+
+**Follow-up automation:**
+9. System waits for 2 days  
+10. AI generates a follow-up email  
+11. Follow-up email is sent automatically  
+12. Execution is logged in Google Sheets  
+
+### 🛠 Tools & Technologies
+
+- n8n
+- OpenAI (GPT-4 Mini – summary, emails, follow-ups)
+- Google Sheets (data storage & logging)
+- Gmail API (email communication)
+- Google Calendar (meeting scheduling)
+- Slack (team notifications)
+- HubSpot CRM (contact management)
