@@ -167,11 +167,13 @@ This system not only stores client data but also generates personalized communic
 5. Contact is created in HubSpot (CRM)
 
 **Parallel onboarding actions:**
+
 6. AI generates a personalized welcome email → sent via Gmail  
 7. A welcome call is automatically scheduled via Google Calendar  
 8. Internal team is notified via Slack  
 
 **Follow-up automation:**
+
 9. System waits for 2 days  
 10. AI generates a follow-up email  
 11. Follow-up email is sent automatically  
