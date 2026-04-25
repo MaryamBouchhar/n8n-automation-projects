@@ -154,9 +154,8 @@ ________________________________________________________________________________
 
 ### 7️⃣ AI-Powered Client Onboarding System
 
-An advanced client onboarding workflow that automates the entire onboarding lifecycle - from data collection to follow-up - using AI, CRM integration, and multi-channel communication.
-
-This system not only stores client data but also generates personalized communication, schedules meetings, and ensures continuous engagement.
+A fully automated, production-ready client onboarding system that triggers the moment a new client submits a form — instantly sending a personalized AI-generated welcome email, creating a CRM contact in HubSpot with an AI-written profile summary, scheduling a welcome call in Google Calendar, notifying the internal team on Slack, logging everything to Google Sheets, and automatically sending a follow-up email 2 days later.
+Every action runs in parallel. Every failure is handled gracefully. Every execution is logged with real statuses — not hardcoded values.
 
 ### 🔄 Workflow Logic
 
