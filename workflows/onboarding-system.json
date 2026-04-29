@@ -3,19 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "jsCode": "const text = $input.first().json.output\nconst parsed = JSON.parse(text)\nreturn parsed"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2288,
-        1104
-      ],
-      "id": "ca6ee0c4-08e0-4d84-a284-1cf0a99c2bf1",
-      "name": "Parse follow-up JSON"
-    },
-    {
-      "parameters": {
         "formTitle": "Onboarding System",
         "formDescription": "Please fulfill all of the fields",
         "formFields": {
@@ -32,7 +19,6 @@
             },
             {
               "fieldLabel": "Phone",
-              "fieldType": "number",
               "placeholder": "Please enter your phone number",
               "requiredField": true
             },
@@ -44,7 +30,51 @@
             },
             {
               "fieldLabel": "Industry",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Technology"
+                  },
+                  {
+                    "option": "Healthcare"
+                  },
+                  {
+                    "option": "Finance"
+                  },
+                  {
+                    "option": "Retail"
+                  },
+                  {
+                    "option": "Education"
+                  },
+                  {
+                    "option": "Manufacturing"
+                  },
+                  {
+                    "option": "Other"
+                  }
+                ]
+              },
               "requiredField": true
+            },
+            {
+              "fieldLabel": "Company Name"
+            },
+            {
+              "fieldLabel": "Company Size"
+            },
+            {
+              "fieldLabel": "Country / HQ Location"
+            },
+            {
+              "fieldLabel": "Job Title / Role"
+            },
+            {
+              "fieldLabel": "Main Goal / Challenge"
+            },
+            {
+              "fieldLabel": "Budget Range"
             }
           ]
         },
@@ -60,40 +90,25 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.5,
       "position": [
-        464,
-        1248
+        -2048,
+        796
       ],
-      "id": "c2425d6f-b0cc-45a7-afd3-900d841d6826",
+      "id": "a01ae7f1-912f-4e02-98fd-36fdf070211c",
       "name": "Form - New Client",
-      "webhookId": "c42fff8a-d869-4792-9226-bc6f4b706238"
+      "webhookId": "8512d92a-27c9-48ed-b5b8-812b74551d09"
     },
     {
       "parameters": {
-        "jsCode": "const data = $input.first().json;\n\nreturn [{\n  json: {\n    ...data,\n    'First Name': data['First Name'].trim(),\n    'Last Name': data['Last Name'].trim(),\n    'Email': data['Email'].trim().toLowerCase(),\n    'Industry': data['Industry'].trim(),\n  }\n}];"
+        "jsCode": "const data = $input.first().json;\nreturn [{\n  json: {\n    ...data,\n    'First Name':data['First Name']?.trim(),\n    'Last Name':data['Last Name']?.trim(),\n    'Email': data['Email']?.trim().toLowerCase(),\n    'Industry': data['Industry']?.trim(),\n    'Company Name':data['Company Name']?.trim() ?? '',\n    'Company Size':data['Company Size']?.trim() ?? '',\n    'Country / HQ Location': data['Country / HQ Location']?.trim() ?? '',\n    'Job Title / Role': data['Job Title / Role']?.trim() ?? '',\n    'Main Goal / Challenge':  data['Main Goal / Challenge']?.trim() ?? '',\n    'Budget Range': data['Budget Range']?.trim() ?? '',\n  }\n}];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        688,
-        1248
+        -1824,
+        796
       ],
-      "id": "9804858d-bcec-4fed-aab4-cc5f9160c05d",
+      "id": "4e61cbb4-6d5d-4037-b318-29011a531733",
       "name": "Clean Form data"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=Can you generate a warm and professional welcome email for a new client based on the information provided?\nThe message should be friendly, brief, and personalized—while still sounding professional.\nIt should reflect the client’s industry and their goals for our collaboration. Below is the client’s information:\nName: {{ $json['First Name'] }}\nEmail: {{ $json.Email }}\nCompany Industry: {{ $json.Industry }}\n\nMake sure to always end the email with the following sign-off:\nBest regards,\nBob Bob\nVP of Internal Relations\nABC Corp\nDo not use placeholders like [Your Name] or\n[Your Contact Information] under any circumstances, even if some information is missing.\nAlways respond ONLY in this exact JSON format with no extra text, no markdown, no code fences:\n{\"Subject\": \"...\", \"Body\": \"...\", \"Email\": \"...\"}\n",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 3.1,
-      "position": [
-        912,
-        992
-      ],
-      "id": "c1c4993d-867c-4851-a5d5-430cd6b76e6b",
-      "name": "AI - Generate Welcome Email"
     },
     {
       "parameters": {
@@ -104,48 +119,36 @@
           "cachedResultName": "gpt-4o-mini"
         },
         "builtInTools": {},
-        "options": {}
+        "options": {
+          "temperature": 0.3
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        992,
-        1216
+        -280,
+        828
       ],
-      "id": "77e09252-6ab3-40e8-a869-82475c4a6e73",
+      "id": "f0ef7dc6-f71a-49e8-844f-dd7fbbd6b372",
       "name": "GPT-4o-mini (Email)",
       "credentials": {
         "openAiApi": {
-          "id": "VcFg8Xw8Z2GlaTsR",
+          "id": "EsyY5oqMVVOEZqVX",
           "name": "n8n free OpenAI API credits"
         }
       }
     },
     {
       "parameters": {
-        "amount": 2
-      },
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1.1,
-      "position": [
-        1712,
-        1104
-      ],
-      "id": "b58bbae0-2870-45b0-9919-b8e6a5ce225e",
-      "name": "Wait - 2 Days",
-      "webhookId": "29af27ef-408b-4fa4-8828-a4ee71514ed9"
-    },
-    {
-      "parameters": {
-        "jsCode": "const text = $input.first().json.output;\n\nconst parsed = JSON.parse(text)\n\nreturn parsed"
+        "jsCode": "const text = $input.first().json.text;\ntry {\n  const parsedText = JSON.parse(text);\n  return parsedText\n} catch(e){\n  throw new Error (`AI returned invalid json: ${text.substring(0,200)}`)\n}\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1264,
-        1104
+        0,
+        604
       ],
-      "id": "85171871-192a-459e-818c-49a6fc4e5cb2",
+      "id": "05d96b73-4d44-44a2-89d1-a69081894e23",
       "name": "Parse - JSON"
     },
     {
@@ -160,279 +163,62 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        1488,
-        1104
+        224,
+        604
       ],
-      "id": "f3f155ac-1c4a-4574-9526-fc6419530c8e",
+      "id": "4d42184a-b8bb-46e3-a058-6b8aca7c3007",
       "name": "Gmail - Send Welcome Email",
       "webhookId": "c61c6710-f0d9-4c10-b235-2f0f4294608b",
       "credentials": {
         "gmailOAuth2": {
-          "id": "cSPfcPbPdnncBUMB",
+          "id": "iC87Z0IO66h2QmKU",
           "name": "Gmail OAuth2 API"
         }
       },
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=You are a professional client success manager at ABC Corp.\n\nWrite a short, warm follow-up email to a client who onboarded 2 days ago.\nThe email should:\n- Check in and ask how they are settling in\n- Offer help if they have any questions\n- Feel personal, not automated\n- Be no longer than 5 sentences\n\nClient information:\nName: {{ $('Clean Form data').item.json['First Name'] }}\nIndustry: {{ $('Clean Form data').item.json['Industry'] }}\nemail: {{ $('Clean Form data').item.json.Email }}\n\nMake sure to always end with:\nBest regards,\nBob Bob\nVP of Internal Relations\nABC Corp\n\nAlways respond ONLY in this exact JSON format with no extra text, no markdown, no code fences:\n{\"Subject\": \"...\", \"Body\": \"...\", \"Email\": \"...\"}",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 3.1,
-      "position": [
-        1936,
-        1104
-      ],
-      "id": "e9db67f5-2a52-455b-98ea-d21c6165d783",
-      "name": "AI - Generate Follow-up Email"
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4o-mini",
-          "mode": "list",
-          "cachedResultName": "gpt-4o-mini"
-        },
-        "builtInTools": {},
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.3,
-      "position": [
-        2016,
-        1328
-      ],
-      "id": "090e6f78-367e-46c5-887d-57875542b515",
-      "name": "GPT-4o-mini (Follow-up)",
-      "credentials": {
-        "openAiApi": {
-          "id": "VcFg8Xw8Z2GlaTsR",
-          "name": "n8n free OpenAI API credits"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "sendTo": "={{ $json.Email }}",
-        "subject": "={{ $json.Subject }}",
-        "message": "={{ $json.Body }}",
-        "options": {
-          "appendAttribution": false
-        }
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.2,
-      "position": [
-        2512,
-        1104
-      ],
-      "id": "5b2ec5cc-b152-45f5-8be8-ec121d7243a5",
-      "name": "Gmail - Send Follow-up Email",
-      "webhookId": "ea8e218f-25b6-4de1-adab-1986e5eb0eb7",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "cSPfcPbPdnncBUMB",
-          "name": "Gmail OAuth2 API"
-        }
-      },
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=You are a CRM assistant. Based on the client information below, \ngenerate a concise professional profile summary.\n\n \nName: {{ $json['First Name'] }} {{ $json['Last Name'] }}\nEmail: {{ $json.Email }}\nIndustry: {{ $json.Industry }}\n\nReturn the following fields:\n- Name: the client's full name\n- Email: the client's email address  \n- Summary: a 2-3 sentence professional overview of this client \n  based on their industry, suitable for a CRM contact record\n\nAlways respond ONLY in this exact JSON format with no extra text, \nno markdown, no code fences:\n{\"Name\": \"...\", \"Email\": \"...\", \"Summary\": \"...\"}",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 3.1,
-      "position": [
-        912,
-        592
-      ],
-      "id": "f3bed5cf-d1dd-4533-81d9-750767ebce17",
-      "name": "AI - Generate Client Summary"
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4o-mini",
-          "mode": "list",
-          "cachedResultName": "gpt-4o-mini"
-        },
-        "builtInTools": {},
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.3,
-      "position": [
-        992,
-        816
-      ],
-      "id": "7c515baa-0e75-4fbf-bd2a-40a3c1b108aa",
-      "name": "GPT-4o-mini (Summary)",
-      "credentials": {
-        "openAiApi": {
-          "id": "VcFg8Xw8Z2GlaTsR",
-          "name": "n8n free OpenAI API credits"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "const text = $input.first().json.output;\nconst parsedText = JSON.parse(text);\nreturn parsedText"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1264,
-        688
-      ],
-      "id": "2955e425-bde7-432c-b6a2-5a8bb5ebf626",
-      "name": "Parse Summary JSON"
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8",
-          "mode": "list",
-          "cachedResultName": "clients's onboarding",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "clients",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "Name": "={{ $json.Name }}",
-            "Email": "={{ $json.Email }}",
-            "Phone": "={{ $('Form - New Client').item.json.Phone }}",
-            "Industry": "={{ $('Form - New Client').item.json.Industry }}",
-            "Onboarded At": "={{ $now.toISO()}}",
-            "Summary": "={{ $json.Summary }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "Name",
-              "displayName": "Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Email",
-              "displayName": "Email",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Phone",
-              "displayName": "Phone",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Industry",
-              "displayName": "Industry",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Onboarded At",
-              "displayName": "Onboarded At",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Summary",
-              "displayName": "Summary",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        1632,
-        688
-      ],
-      "id": "e8b1f3d3-7a55-43d0-b57b-3b6354f9aa4a",
-      "name": "Sheets - Save Client",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "yYonmbwKsAJWJpMy",
-          "name": "Google Sheets OAuth2 API"
-        }
-      }
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
         "authentication": "oAuth2",
         "email": "={{ $('Clean Form data').item.json.Email }}",
         "additionalFields": {
+          "companyName": "={{ $('Clean Form data').item.json['Company Name'] }}",
+          "companySize": "={{ $('Clean Form data').item.json['Company Size'] }}",
+          "country": "={{ $('Clean Form data').item.json['Country / HQ Location'] }}",
           "customPropertiesUi": {
             "customPropertiesValues": [
               {
                 "property": "ai_summary",
-                "value": "={{ $('Parse Summary JSON').item.json.Summary }}"
+                "value": "={{ $json.Summary }}"
               }
             ]
           },
           "firstName": "={{ $('Clean Form data').item.json['First Name'] }}",
           "industry": "={{ $('Clean Form data').item.json.Industry }}",
+          "jobTitle": "={{ $('Clean Form data').item.json['Job Title / Role'] }}",
           "lastName": "={{ $('Clean Form data').item.json['Last Name'] }}",
           "phoneNumber": "={{ $('Clean Form data').item.json.Phone }}"
         },
-        "options": {}
+        "options": {
+          "resolveData": false
+        }
       },
       "type": "n8n-nodes-base.hubspot",
       "typeVersion": 2.2,
       "position": [
-        1968,
-        688
+        224,
+        160
       ],
-      "id": "157cbcc6-3b4e-459e-8e8b-49acb1c67a78",
+      "id": "38e51396-a357-48a1-8732-3431e68daee7",
       "name": "HubSpot - Create/Update Contact",
+      "retryOnFail": false,
       "credentials": {
         "hubspotOAuth2Api": {
-          "id": "UTGhCLHfelnk8Xf9",
+          "id": "ZDxOhEKsELZ8RQ5Z",
           "name": "HubSpot OAuth2 API"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -444,7 +230,7 @@
           "mode": "list",
           "cachedResultName": "social"
         },
-        "text": "=🟢 New client onboarded!  \n\nName: {{ $('Form - New Client').item.json['First Name'] }} {{ $('Form - New Client').item.json['Last Name'] }}\nEmail: {{ $('Form - New Client').item.json['Email'] }} \nIndustry: {{ $('Form - New Client').item.json['Industry'] }} \nSubmitted at: {{ $('Form - New Client').item.json['submittedAt'] }}",
+        "text": "=🟢 New client onboarded!\n\n*Name:* {{ $json['First Name'] }} {{ $json['Last Name'] }}\n*Company:* {{ $json['Company Name'] }}\n*Industry:* {{ $json.Industry }}\n*Goal:* {{ $json['Main Goal / Challenge'] }}\n*Email:* {{ $json.Email }}",
         "otherOptions": {
           "mrkdwn": true
         }
@@ -452,18 +238,19 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.4,
       "position": [
-        976,
-        1584
+        224,
+        1372
       ],
-      "id": "9bdc42b2-2c44-46d7-acfc-08cd149262bb",
+      "id": "80e9b86d-0142-4141-a9ee-091907879523",
       "name": "Slack - Notify Team",
       "webhookId": "ce18051b-89b5-4551-bec8-e23025faa314",
       "credentials": {
         "slackOAuth2Api": {
-          "id": "geAQwHfsT3TthU88",
+          "id": "jvvSWfWTjyxBNUXB",
           "name": "Slack OAuth2 API"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -479,7 +266,7 @@
           "attendees": [
             "={{ $json.Email }}"
           ],
-          "description": "=Welcome call with new client from the {{ $('Clean Form data').item.json['Industry'] }} industry.  Client email: {{ $('Clean Form data').item.json['Email'] }} Client phone: {{ $('Clean Form data').item.json['Phone'] }}",
+          "description": "=Welcome call with new client from the \"{{ $json['Company Name'] }}\" company.  Client email: {{ $('Clean Form data').item.json['Email'] }} Client phone: {{ $('Clean Form data').item.json['Phone'] }}",
           "sendUpdates": "all",
           "summary": "=Welcome Call - {{ $('Clean Form data').item.json['First Name'] }} {{ $('Clean Form data').item.json['Last Name'] }}"
         }
@@ -487,39 +274,144 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        976,
-        1392
+        224,
+        988
       ],
-      "id": "f3171056-981a-42e9-97ee-6f9354b85184",
+      "id": "809be6c7-ca88-438f-a35c-d554d1aadfec",
       "name": "Calendar - Schedule Welcome Call",
       "credentials": {
         "googleCalendarOAuth2Api": {
-          "id": "CGYIkwFmt1XtGlMw",
+          "id": "h2EAQlZq1cFdcKbV",
           "name": "Google Calendar OAuth2 API"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Name: {{ $json['First Name'] }} {{ $json['Last Name'] }}\nCompany: {{ $json['Company Name'] }}\nIndustry: {{ $json.Industry }}\nJob Title: {{ $json['Job Title'] }}\nMain Goal: {{ $json['Main Goal / Challenge'] }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=generate a warm and professional welcome email for a new client based on the information provided? The message should be friendly, brief, and personalized—while still sounding professional. It should reflect the client’s industry and their goals for our collaboration. Make sure to always end the email with the following sign-off: Best regards, Maryam VP of Internal Relations MBcomp Do not use placeholders like [Your Name] or [Your Contact Information] under any circumstances, even if some information is missing. Always respond ONLY in this exact JSON format with no extra text, no markdown, no code fences: {\"Subject\": \"...\", \"Body\": \"...\", \"Email\": \"...\"}"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -352,
+        604
+      ],
+      "id": "c39a3af8-6dbf-4cc0-8020-cf9590f33786",
+      "name": "AI - Generate Welcome Email"
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        672,
+        764
+      ],
+      "id": "98bd3e7d-902c-420d-a41c-dcf53f0517fb",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $input.first().json.text;\ntry {\n  const parsedText = JSON.parse(text);\n  return parsedText\n} catch(e){\n  throw new Error (`AI returned invalid json: ${text.substring(0,200)}`)\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        796
+      ],
+      "id": "6b390397-0b7c-4c40-a862-6841ec5c1265",
+      "name": "Parse follow-up JSON"
+    },
+    {
+      "parameters": {
+        "amount": 2,
+        "unit": "days"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1344,
+        796
+      ],
+      "id": "853ad164-2c93-4b83-918f-aa1474d01356",
+      "name": "Wait - 2 Days",
+      "webhookId": "29af27ef-408b-4fa4-8828-a4ee71514ed9"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1640,
+        1020
+      ],
+      "id": "72ace39b-9536-4b11-a069-5f70967d5790",
+      "name": "GPT-4o-mini (Follow-up)",
+      "credentials": {
+        "openAiApi": {
+          "id": "EsyY5oqMVVOEZqVX",
+          "name": "n8n free OpenAI API credits"
         }
       }
     },
     {
       "parameters": {
-        "jsCode": "const formData = $('Clean Form data').first().json;\n\nreturn [{\n  json: {\n    Timestamp: new Date().toISOString(),\n    'Client Name': `${formData['First Name']} ${formData['Last Name']}`,\n    Email: formData['Email'],\n    Industry: formData['Industry'],\n    'Email Sent': 'Yes',\n    'Calendar Created': 'Yes',\n    'Slack Notified': 'Yes',\n    Status: 'Completed'\n  }\n}];"
+        "sendTo": "={{ $json.Email }}",
+        "subject": "={{ $json.Subject }}",
+        "message": "={{ $json.Body }}",
+        "options": {
+          "appendAttribution": false
+        }
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
       "position": [
-        2672,
-        1104
+        2144,
+        796
       ],
-      "id": "15d2acb7-449c-42cc-b5e2-ca922b3ea1e1",
-      "name": "Build Log Entry"
+      "id": "53471991-5d0a-4206-9ee0-da0e2f8c425c",
+      "name": "Gmail - Send Follow-up Email",
+      "webhookId": "ea8e218f-25b6-4de1-adab-1986e5eb0eb7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "iC87Z0IO66h2QmKU",
+          "name": "Gmail OAuth2 API"
+        }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
-        "operation": "append",
+        "operation": "update",
         "documentId": {
           "__rl": true,
           "value": "1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8",
           "mode": "list",
-          "cachedResultName": "clients's onboarding",
+          "cachedResultName": "Client Onboarding",
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8/edit?usp=drivesdk"
         },
         "sheetName": {
@@ -532,14 +424,183 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "Client Name": "={{ $json['Client Name'] }}",
+            "Email": "={{ $('Sheets - Log Execution').item.json.Email }}",
+            "Follow-up Sent": "={{ $json.FollowUpEmailStatus }}",
+            "Follow-up Date": "={{ $now.toISO() }}",
+            "Timestamp": "={{ $now.toISO() }}",
+            "Client Name": "={{ $('Sheets - Log Execution').item.json['Client Name'] }}",
+            "Industry": "={{ $('Sheets - Log Execution').item.json.Industry }}",
+            "Email Sent": "={{ $('Sheets - Log Execution').item.json['Email Sent'] }}",
+            "Calendar Created": "={{ $('Sheets - Log Execution').item.json['Calendar Created'] }}",
+            "HubSpot": "={{ $('Sheets - Log Execution').item.json.HubSpot }}",
+            "Slack Notified": "={{ $('Sheets - Log Execution').item.json['Slack Notified'] }}",
+            "Status": "={{ $('Sheets - Log Execution').item.json.Status }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Client Name",
+              "displayName": "Client Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email Sent",
+              "displayName": "Email Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Calendar Created",
+              "displayName": "Calendar Created",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "HubSpot",
+              "displayName": "HubSpot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Slack Notified",
+              "displayName": "Slack Notified",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow-up Sent",
+              "displayName": "Follow-up Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow-up Date",
+              "displayName": "Follow-up Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2592,
+        796
+      ],
+      "id": "a2d83266-56e5-4105-92f2-ca6d612517b2",
+      "name": "Sheets - Update Follow-up Status",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "TSzdkNf7zyoiLUT2",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8",
+          "mode": "list",
+          "cachedResultName": "Client Onboarding",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1857315534,
+          "mode": "list",
+          "cachedResultName": "Execution Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8/edit#gid=1857315534"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
             "Timestamp": "={{ $json.Timestamp }}",
+            "Client Name": "={{ $json['Client Name'] }}",
             "Email": "={{ $json.Email }}",
             "Industry": "={{ $json.Industry }}",
-            "Email Sent": "=Yes",
-            "Calendar Created": "yes",
-            "Slack Notified": "yes",
-            "Status": "New"
+            "Calendar Created": "={{ $json['Calendar Created'] }}",
+            "Email Sent": "={{ $json['Email Sent'] }}",
+            "HubSpot": "={{ $json.HubSpot }}",
+            "Status": "={{ $json.Status }}",
+            "Slack Notified": "={{ $json['Slack Notified'] }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -598,6 +659,15 @@
               "canBeUsedToMatch": true
             },
             {
+              "id": "HubSpot",
+              "displayName": "HubSpot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
               "id": "Slack Notified",
               "displayName": "Slack Notified",
               "required": false,
@@ -624,29 +694,880 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2816,
-        1104
+        1120,
+        796
       ],
-      "id": "d5ae97cc-2064-4f18-98c4-60d57dcac167",
+      "id": "d0dc3604-8f5b-4b59-984f-a27097458546",
       "name": "Sheets - Log Execution",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "yYonmbwKsAJWJpMy",
+          "id": "TSzdkNf7zyoiLUT2",
           "name": "Google Sheets OAuth2 API"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\n// Each item came from one branch's Set node\nconst find = (key) => {\n  const match = items.find(i => i.json[key] !== undefined);\n  return match ? match.json[key] : 'Failed';\n};\n\nconst emailStatus    = find('emailStatus');\nconst calendarStatus = find('calendarStatus');\nconst slackStatus    = find('slackStatus');\nconst hubspotStatus  = find('hubspotStatus');\nconst formData       = $('Clean Form data').first().json;\n\nconst hasFailed = [emailStatus,calendarStatus,\n  slackStatus,hubspotStatus].some(s => s === 'Failed');\n\nreturn [{json: {\n  Timestamp: new Date().toISOString(),\n  'Client Name': `${formData['First Name']} ${formData['Last Name']}`,\n  Email: formData.Email,\n  Industry: formData.Industry,\n  'Email Sent': emailStatus,\n  'Calendar Created': calendarStatus,\n  'Slack Notified': slackStatus,\n  HubSpot: hubspotStatus,\n  Status: hasFailed ? 'Partial' : 'Completed'\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        796
+      ],
+      "id": "15848dd4-564b-4e4f-9937-dc1cf7024501",
+      "name": "Build Log Entry"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Name: {{ $('Clean Form data').item.json['First Name'] }} {{ $('Clean Form data').item.json['Last Name'] }}\nCompany: {{ $('Clean Form data').item.json['Company Name'] }}\nIndustry: {{ $('Clean Form data').item.json['Industry'] }}\nJob Title: {{ $('Clean Form data').item.json['Job Title'] }}\nMain Goal: {{ $('Clean Form data').item.json['Main Goal / Challenge'] }}\nBudget: {{ $('Clean Form data').item.json['Budget Range'] }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "Write a professional 2-sentence CRM summary using only the provided contact data.  - Do not add, infer, or assume any information not explicitly given. - If the data is insufficient, return a generic but accurate summary.  Return ONLY valid JSON: {\"Summary\": \"...\"}"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -928,
+        -4
+      ],
+      "id": "b1a07b45-7c74-457b-af85-91d20c23cf14",
+      "name": "AI - Generate HubSpot Summary"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -856,
+        220
+      ],
+      "id": "bf28190c-0486-40d8-ad2e-398ed8833784",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "EsyY5oqMVVOEZqVX",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8",
+          "mode": "list",
+          "cachedResultName": "Client Onboarding",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "clients",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Clean Form data').item.json['First Name'] }} {{ $('Clean Form data').item.json['Last Name'] }}",
+            "Email": "={{ $('Clean Form data').item.json.Email }}",
+            "Phone": "={{ $('Clean Form data').item.json.Phone }}",
+            "Industry": "={{ $('Clean Form data').item.json.Industry }}",
+            "Company Name": "={{ $('Clean Form data').item.json['Company Name'] }}",
+            "Job Title / Role": "={{ $('Clean Form data').item.json['Job Title / Role'] }}",
+            "Country / HQ Location": "={{ $('Clean Form data').item.json['Country / HQ Location'] }}",
+            "Budget Range": "={{ $('Clean Form data').item.json['Budget Range'] }}",
+            "Summary": "={{ $json.Summary }}",
+            "Onboarded At": "={{$now.format('yyyy-MM-dd HH:MM')}}",
+            "Status": "New"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Main Goal / Challenge",
+              "displayName": "Main Goal / Challenge",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Job Title / Role",
+              "displayName": "Job Title / Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Country / HQ Location",
+              "displayName": "Country / HQ Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget Range",
+              "displayName": "Budget Range",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Onboarded At",
+              "displayName": "Onboarded At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        -32
+      ],
+      "id": "bb5121a2-fce9-48f3-9953-a150ab81c5cd",
+      "name": "Sheets - Append Client",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "TSzdkNf7zyoiLUT2",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1616a7a4-50db-4ee9-bb09-5e859340c86c",
+              "leftValue": "={{ $('Client Exists?').item.json.Email ?? '' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -288,
+        -4
+      ],
+      "id": "6fe79988-be13-4eea-a70d-4b0e2d1841b8",
+      "name": "Is New Client?"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8",
+          "mode": "list",
+          "cachedResultName": "Client Onboarding",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "clients",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Clean Form data').item.json['First Name'] }} {{ $('Clean Form data').item.json['Last Name'] }}",
+            "Email": "={{ $('Clean Form data').item.json.Email }}",
+            "Phone": "={{ $('Clean Form data').item.json.Phone }}",
+            "Industry": "={{ $('Clean Form data').item.json.Industry }}",
+            "Company Name": "={{ $('Clean Form data').item.json['Company Name'] }}",
+            "Main Goal / Challenge ": "={{ $('Clean Form data').item.json['Main Goal / Challenge '] }}",
+            "Job Title / Role": "={{ $('Clean Form data').item.json['Job Title / Role'] }}",
+            "Country / HQ Location": "={{ $('Clean Form data').item.json['Country / HQ Location'] }}",
+            "Budget Range": "={{ $('Clean Form data').item.json['Budget Range'] }}",
+            "Summary": "={{ $json.Summary }}",
+            "Onboarded At": "={{$now.format('yyyy-MM-dd HH:MM')}}",
+            "Status": "Updated"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Main Goal / Challenge ",
+              "displayName": "Main Goal / Challenge ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title / Role",
+              "displayName": "Job Title / Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Country / HQ Location",
+              "displayName": "Country / HQ Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget Range",
+              "displayName": "Budget Range",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Onboarded At",
+              "displayName": "Onboarded At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        160
+      ],
+      "id": "81e0f02f-fb9c-4a14-b62d-8a2f21e542f4",
+      "name": "Sheets - Update infos",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "TSzdkNf7zyoiLUT2",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const summary = $input.first().json.text;\ntry {\nconst parsed = JSON.parse(summary);\nreturn parsed;\n} catch(e) {\nthrow new Error(`AI returned invalid JSON: ${summary.substring(0,200)}`);\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -576,
+        -4
+      ],
+      "id": "fe2f61c6-2923-418f-9937-e126c5f613db",
+      "name": "Parse-JSON"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d834bf9a-1b73-462c-b060-4302dc7b5522",
+              "name": "emailStatus",
+              "value": "Sent",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        508
+      ],
+      "id": "12b8bb11-53d7-4c8c-b6d7-378f2d456dda",
+      "name": "Gmail success Set"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3d80e11d-85ec-4dfc-9f26-42785d5ec32c",
+              "name": "emailStatus",
+              "value": "Failed",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        700
+      ],
+      "id": "51cf959f-490d-4108-84a9-3354cbd21c31",
+      "name": "Gmail error Set"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "87480d0a-060c-4117-8280-b89d989915d5",
+              "name": "calendarStatus",
+              "value": "Failed",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        1084
+      ],
+      "id": "6a5d50f1-16ef-45ab-a726-22e8829a93a2",
+      "name": "Calendar error Set"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "503a7d0d-28c3-4ded-aba0-e803df04af93",
+              "name": "slackStatus",
+              "value": "Sent",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        1276
+      ],
+      "id": "4c58192f-25e2-4b2d-a872-0cdcb2dd67ff",
+      "name": "Slack success Set"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "503a7d0d-28c3-4ded-aba0-e803df04af93",
+              "name": "slackStatus",
+              "value": "Failed",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        1468
+      ],
+      "id": "cf9e6dfd-e732-4203-b330-f749516014df",
+      "name": "Slack  error Set"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1e6adddb-725d-4c5b-99ce-f737723d2147",
+              "name": "hubspotStatus",
+              "value": "Created",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        24
+      ],
+      "id": "1a305274-97a4-4399-b033-449b6112a912",
+      "name": "HubSpot success Set"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1e6adddb-725d-4c5b-99ce-f737723d2147",
+              "name": "hubspotStatus",
+              "value": "Failed",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        316
+      ],
+      "id": "f28fc9a6-9b4a-4b09-b8dc-44c52d874f40",
+      "name": "HubSpot error Set"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7cc2f442-8a5a-4a09-98fa-bb6fc7302a8b",
+              "name": "calendarStatus",
+              "value": "Created",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        892
+      ],
+      "id": "86d82952-ba0b-426b-881f-4cbbcf11fb18",
+      "name": "Calendar success Set"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0520f5d5-6c32-45ff-b240-fb69a0aac9db",
+              "name": "FollowUpEmailStatus",
+              "value": "Sent",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2368,
+        700
+      ],
+      "id": "58488727-f89d-4dac-af00-69d428d81003",
+      "name": "Follow-up Email success set"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0520f5d5-6c32-45ff-b240-fb69a0aac9db",
+              "name": "FollowUpEmailStatus",
+              "value": "Failed",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2368,
+        892
+      ],
+      "id": "d7f2f6c7-642d-46d3-83f8-12d0f284504f",
+      "name": "Follow-up Email error set"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional client success manager at MBcamp.\n\nWrite a short, warm follow-up email to a client who onboarded 2 days ago.\nThe email should:\n- Check in and ask how they are settling in\n- Offer help if they have any questions\n- Feel personal, not automated\n- Be no longer than 5 sentences\n\nClient information:\nName: {{ $json['Client Name'] }}\nIndustry: {{ $json.Industry }}\nemail: {{ $json.Email }}\n\nMake sure to always end with:\nBest regards,\nMaryam\nVP of Internal Relations\nMBcomp\n\nAlways respond ONLY in this exact JSON format with no extra text, no markdown, no code fences:\n{\"Subject\": \"...\", \"Body\": \"...\", \"Email\": \"...\"}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1568,
+        796
+      ],
+      "id": "a5d60de5-abdc-4d1d-897c-9655044e56c5",
+      "name": "AI - Generate Follow-up Email"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "edda2855-a79d-4329-b887-a4b6a1096595",
+              "leftValue": "={{ $json['First Name'] }} {{ $json['Last Name'] }}",
+              "rightValue": "={{ $('Clean Form data').item.json['First Name'] }} {{ $('Clean Form data').item.json['Last Name'] }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "aa3125bb-1868-4337-a0cc-07758c5281df",
+              "leftValue": "={{ $json.Industry }}",
+              "rightValue": "={{ $('Clean Form data').item.json.Industry }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "89a41dc2-b1d7-48c9-86fd-4cc549a5ec75",
+              "leftValue": "={{ $json['Company Name'] }}",
+              "rightValue": "={{ $('Clean Form data').item.json['Company Name'] }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "c5b9cd86-980d-47af-93f0-e51abe015b73",
+              "leftValue": "={{ $json['Main Goal / Challenge'] }}",
+              "rightValue": "={{ $('Clean Form data').item.json['Main Goal / Challenge'] }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "8ad37c14-8c3d-427a-a106-59002934bfc4",
+              "leftValue": "={{ $json['Budget Range'] }}",
+              "rightValue": "={{ $('Clean Form data').item.json['Budget Range'] }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1152,
+        240
+      ],
+      "id": "e1a8c579-b078-4d34-a714-c31876885dfa",
+      "name": "Profile Changed?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "eb74947b-ce11-4c12-a3ae-a510809edca3",
+              "leftValue": "={{ $json.Email ?? '' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1376,
+        120
+      ],
+      "id": "8cf94b52-3cf1-455c-a265-f2d2c8b8beb3",
+      "name": "Client Exists?",
+      "executeOnce": false,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8",
+          "mode": "list",
+          "cachedResultName": "Client Onboarding",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "clients",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nhZDjlQ_vhSHHoZwigsrH3akRFvl46LHLe2ks2SDtu8/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Email",
+              "lookupValue": "={{ $json.Email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1600,
+        120
+      ],
+      "id": "0f9a46c3-4363-4b57-a8ae-373ac2108f2e",
+      "name": "Sheets - Check Existing Client",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "TSzdkNf7zyoiLUT2",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "onError": "continueRegularOutput"
     }
   ],
   "pinData": {
     "Form - New Client": [
       {
         "json": {
-          "First Name": "Mohammed",
-          "Last Name": "Bouchhar",
-          "Phone": 675070080,
-          "Email": "yokosoguts@gmail.com",
-          "Industry": "IT",
-          "submittedAt": "2026-04-20T19:16:36.907+01:00",
+          "First Name": "Bob",
+          "Last Name": "Bob",
+          "Phone": "067507080",
+          "Email": "meryem.bouxhhar@gmail.com",
+          "Industry": "Healthcare",
+          "Company Name": "Bm",
+          "Company Size": "10-50",
+          "Country / HQ Location": "Morocco",
+          "Job Title / Role": "AI developer",
+          "Main Goal / Challenge": "",
+          "Budget Range": "500.000",
+          "submittedAt": "2026-04-29T13:10:24.220+01:00",
           "formMode": "test"
         },
         "pairedItem": {
@@ -656,17 +1577,6 @@
     ]
   },
   "connections": {
-    "Parse follow-up JSON": {
-      "main": [
-        [
-          {
-            "node": "Gmail - Send Follow-up Email",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Form - New Client": {
       "main": [
         [
@@ -682,12 +1592,7 @@
       "main": [
         [
           {
-            "node": "AI - Generate Client Summary",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "AI - Generate Welcome Email",
+            "node": "Sheets - Check Existing Client",
             "type": "main",
             "index": 0
           },
@@ -700,15 +1605,9 @@
             "node": "Calendar - Schedule Welcome Call",
             "type": "main",
             "index": 0
-          }
-        ]
-      ]
-    },
-    "AI - Generate Welcome Email": {
-      "main": [
-        [
+          },
           {
-            "node": "Parse - JSON",
+            "node": "AI - Generate Welcome Email",
             "type": "main",
             "index": 0
           }
@@ -721,17 +1620,6 @@
           {
             "node": "AI - Generate Welcome Email",
             "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Wait - 2 Days": {
-      "main": [
-        [
-          {
-            "node": "AI - Generate Follow-up Email",
-            "type": "main",
             "index": 0
           }
         ]
@@ -752,18 +1640,112 @@
       "main": [
         [
           {
-            "node": "Wait - 2 Days",
+            "node": "Gmail success Set",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail error Set",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "AI - Generate Follow-up Email": {
+    "HubSpot - Create/Update Contact": {
       "main": [
         [
           {
-            "node": "Parse follow-up JSON",
+            "node": "HubSpot success Set",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HubSpot error Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack - Notify Team": {
+      "main": [
+        [
+          {
+            "node": "Slack success Set",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack  error Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar - Schedule Welcome Call": {
+      "main": [
+        [
+          {
+            "node": "Calendar success Set",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Calendar error Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI - Generate Welcome Email": {
+      "main": [
+        [
+          {
+            "node": "Parse - JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Build Log Entry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse follow-up JSON": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Send Follow-up Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait - 2 Days": {
+      "main": [
+        [
+          {
+            "node": "AI - Generate Follow-up Email",
             "type": "main",
             "index": 0
           }
@@ -785,70 +1767,29 @@
       "main": [
         [
           {
-            "node": "Build Log Entry",
+            "node": "Follow-up Email success set",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Follow-up Email error set",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "AI - Generate Client Summary": {
+    "Sheets - Log Execution": {
       "main": [
         [
           {
-            "node": "Parse Summary JSON",
+            "node": "Wait - 2 Days",
             "type": "main",
             "index": 0
           }
         ]
-      ]
-    },
-    "GPT-4o-mini (Summary)": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI - Generate Client Summary",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Parse Summary JSON": {
-      "main": [
-        [
-          {
-            "node": "Sheets - Save Client",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Sheets - Save Client": {
-      "main": [
-        [
-          {
-            "node": "HubSpot - Create/Update Contact",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "HubSpot - Create/Update Contact": {
-      "main": [
-        []
-      ]
-    },
-    "Slack - Notify Team": {
-      "main": [
-        []
-      ]
-    },
-    "Calendar - Schedule Welcome Call": {
-      "main": [
-        []
       ]
     },
     "Build Log Entry": {
@@ -861,6 +1802,247 @@
           }
         ]
       ]
+    },
+    "AI - Generate HubSpot Summary": {
+      "main": [
+        [
+          {
+            "node": "Parse-JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI - Generate HubSpot Summary",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets - Append Client": {
+      "main": [
+        [
+          {
+            "node": "HubSpot - Create/Update Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is New Client?": {
+      "main": [
+        [
+          {
+            "node": "Sheets - Append Client",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sheets - Update infos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets - Update infos": {
+      "main": [
+        [
+          {
+            "node": "HubSpot - Create/Update Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse-JSON": {
+      "main": [
+        [
+          {
+            "node": "Is New Client?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail success Set": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Gmail error Set": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Calendar error Set": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Slack success Set": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Slack  error Set": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "HubSpot error Set": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HubSpot success Set": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar success Set": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Follow-up Email success set": {
+      "main": [
+        [
+          {
+            "node": "Sheets - Update Follow-up Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Follow-up Email error set": {
+      "main": [
+        [
+          {
+            "node": "Sheets - Update Follow-up Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI - Generate Follow-up Email": {
+      "main": [
+        [
+          {
+            "node": "Parse follow-up JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Profile Changed?": {
+      "main": [
+        [
+          {
+            "node": "AI - Generate HubSpot Summary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HubSpot - Create/Update Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Client Exists?": {
+      "main": [
+        [
+          {
+            "node": "Profile Changed?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI - Generate HubSpot Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets - Check Existing Client": {
+      "main": [
+        [
+          {
+            "node": "Client Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -868,11 +2050,11 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "25f2b494-63dc-4808-bca4-5cfc9792f7af",
+  "versionId": "49dd47cb-b83f-4df5-b01c-f3cbc80a560d",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "492601e3e812d3c98db0b72e67c730cd02727a17b852fa771a1db22ae157e2ba"
+    "instanceId": "b0baca20c710e6e25fb5c15630fe3db5326011f5cb916819b97771eaaf538692"
   },
-  "id": "Oi3RxELjIjJttkFN",
+  "id": "yU5yOtsPZUPoxf2M",
   "tags": []
 }
